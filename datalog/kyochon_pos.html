@@ -1,0 +1,539 @@
+<link href="datalog/datalog_main.css" rel="stylesheet" type="text/css" />
+
+<div ng-controller="DatalogPOSSearchController">
+  <div class="answer-modal answer-download" id="answer-download" aria-modal="true">
+    <answer-exportes></answer-exportes>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-2 answer-search-left-wapper">
+        <div class="answer-search-item">
+
+          <div class="answer-search-title answer-cursor-pointer" ng-click="searchReset('basic')">기본검색<span class="answer-ml5" style="color:darkgreen;font-size:12px;"><i class="fa fa-refresh"></i></span></div>
+
+          <div class="row answer-search-item-hr">
+            <div class="col-5 text-right">
+              <label for="branchSearch" style="font-size:12px;margin-bottom:0px;">지사명</label>
+            </div>
+            <div class="col-7">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="branchSearch" ng-model="isBranchSearch">
+                <label class="custom-control-label" for="branchSearch"></label>
+              </div>
+            </div>
+
+            <div ng-show="isBranchSearch" class="col-12 answer-mt5">
+              <div class="row" style="padding-left:10px;">
+                <div
+                  ng-dropdown-multiselect=""
+                  options="branchSearchResult"
+                  selected-model="searchBranchList"
+                  checkboxes="true"
+                  extra-settings="selectSearchSetting"
+                  translation-texts="branchSearchTexts"
+                  events="branchSearchEvent"
+                  style="width:100%;"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row answer-search-item-hr">
+            <div class="col-5 text-right">
+              <label for="franchiseSearch" style="font-size:12px;margin-bottom:0px;">가맹점명</label>
+            </div>
+            <div class="col-7">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="franchiseSearch" ng-model="isFranchiseSearch">
+                <label class="custom-control-label" for="franchiseSearch"></label>
+              </div>
+            </div>
+
+            <div ng-show="isFranchiseSearch" class="col-12 answer-mt5">
+              <div class="row" style="padding-left:10px;">
+                <div
+                  ng-dropdown-multiselect=""
+                  options="franchiseSearchResult"
+                  selected-model="searchFranchiseList"
+                  checkboxes="true"
+                  extra-settings="selectSearchSetting"
+                  translation-texts="franchiseSearchTexts"
+                  events="franchiseSearchEvent"
+                  style="width:100%;"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row answer-search-item-hr">
+            <div class="col-5 text-right">
+              <label for="franchiseSizeSearch" style="font-size:12px;margin-bottom:0px;">가맹점규모</label>
+            </div>
+            <div class="col-7">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="franchiseSizeSearch" ng-model="isFranchiseSizeSearch">
+                <label class="custom-control-label" for="franchiseSizeSearch"></label>
+              </div>
+            </div>
+
+            <div ng-show="isFranchiseSizeSearch" class="col-12 answer-mt5">
+              <div class="row" style="padding-left:10px;">
+                <div
+                  ng-dropdown-multiselect=""
+                  options="franchiseSizeSearchResult"
+                  selected-model="searchFranchiseSizeList"
+                  checkboxes="true"
+                  extra-settings="selectSearchSetting"
+                  translation-texts="franchiseSizeSearchTexts"
+                  events="franchiseSizeSearchEvent"
+                  style="width:100%;"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row answer-search-item-hr">
+            <div class="col-5 text-right">
+              <label for="dateSearch" style="font-size:12px;margin-bottom:0px;">판매날짜</label>
+            </div>
+            <div class="col-7">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="dateSearch" ng-model="isDateSearch">
+                <label class="custom-control-label" for="dateSearch"></label>
+              </div>
+            </div>
+
+            <div ng-show="isDateSearch" class="col-12 answer-mt5">
+              <div class="input-group date" id="startDatePicker" data-target-input="nearest">
+                <input type="text" class="form-control answer-form-input-text-small datetimepicker-input" data-target="#startDatePicker" data-toggle="datetimepicker" ng-model="searchStartDate" id="searchStartDate" />
+                <div class="input-group-append answer-form-btn-small-append" data-target="#startDatePicker" data-toggle="datetimepicker">
+                  <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+              </div>
+            </div>
+
+            <div ng-show="isDateSearch" class="col-12">
+              <div class="input-group date" id="endDatePicker" data-target-input="nearest">
+                <input type="text" class="form-control answer-form-input-text-small datetimepicker-input" data-target="#endDatePicker" data-toggle="datetimepicker" ng-model="searchEndDate" id="searchEndDate" />
+                <div class="input-group-append answer-form-btn-small-append" data-target="#endDatePicker" data-toggle="datetimepicker">
+                  <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="row answer-search-item-hr">
+            <div class="col-5 text-right">
+              <label for="salesWeek" style="font-size:12px;margin-bottom:0px;">판매요일</label>
+            </div>
+            <div class="col-7">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="salesWeek" ng-model="isWeekSearch">
+                <label class="custom-control-label" for="salesWeek"></label>
+              </div>
+            </div>
+
+            <div ng-show="isWeekSearch" class="col-12 answer-mt5">
+              <div class="row" style="padding-left:10px;">
+                <div
+                  ng-dropdown-multiselect=""
+                  options="weekSearchResult"
+                  selected-model="searchWeekList"
+                  checkboxes="true"
+                  extra-settings="selectSearchSetting"
+                  translation-texts="weekSearchTexts"
+                  events="weekSearchEvent"
+                  style="width:100%;"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row answer-search-item-hr">
+            <div class="col-5 text-right">
+              <label for="timeSearch" style="font-size:12px;margin-bottom:0px;">판매시간</label>
+            </div>
+            <div class="col-7">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="timeSearch" ng-model="isTimeSearch">
+                <label class="custom-control-label" for="timeSearch"></label>
+              </div>
+            </div>
+
+            <div ng-show="isTimeSearch" class="col-12 answer-mt5">
+              <div class="input-group date" id="startTimePicker" data-target-input="nearest">
+                <input type="text" class="form-control answer-form-input-text-small datetimepicker-input" data-target="#startTimePicker" data-toggle="datetimepicker" ng-model="searchStartTime" id="searchStartTime" />
+                <div class="input-group-append" data-target="#startTimePicker" data-toggle="datetimepicker">
+                  <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+              </div>
+            </div>
+
+            <div ng-show="isTimeSearch" class="col-12">
+              <div class="input-group date" id="endTimePicker" data-target-input="nearest">
+                <input type="text" class="form-control answer-form-input-text-small datetimepicker-input" data-target="#endTimePicker" data-toggle="datetimepicker" ng-model="searchEndTime" id="searchEndTime" />
+                <div class="input-group-append" data-target="#endTimePicker" data-toggle="datetimepicker">
+                  <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row answer-search-item-hr">
+            <div class="col-5 text-right">
+              <label for="salesTypeSearch" style="font-size:12px;margin-bottom:0px;">판매유형</label>
+            </div>
+            <div class="col-7">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="salesTypeSearch" ng-model="isSalesTypeSearch">
+                <label class="custom-control-label" for="salesTypeSearch"></label>
+              </div>
+            </div>
+
+            <div ng-show="isSalesTypeSearch" class="col-12 answer-mt5">
+              <div class="row" style="padding-left:10px;">
+                <div
+                  ng-dropdown-multiselect=""
+                  options="salesTypeSearchResult"
+                  selected-model="searchSalesTypeList"
+                  checkboxes="true"
+                  extra-settings="selectSearchSetting"
+                  translation-texts="salesTypeSearchTexts"
+                  events="salesTypeSearchEvent"
+                  style="width:100%;"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row answer-search-item-hr">
+            <div class="col-5 text-right">
+              <label for="salesPathSearch" style="font-size:12px;margin-bottom:0px;">판매경로</label>
+            </div>
+            <div class="col-7">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="salesPathSearch" ng-model="isSalesPathSearch">
+                <label class="custom-control-label" for="salesPathSearch"></label>
+              </div>
+            </div>
+
+            <div ng-show="isSalesPathSearch" class="col-12 answer-mt5">
+              <div class="row" style="padding-left:10px;">
+                <div
+                  ng-dropdown-multiselect=""
+                  options="salesPathSearchResult"
+                  selected-model="searchSalesPathList"
+                  checkboxes="true"
+                  extra-settings="selectSearchSetting"
+                  translation-texts="salesPathSearchTexts"
+                  events="salesPathSearchEvent"
+                  style="width:100%;"
+                ></div>
+              </div>
+              <div class="row" style="padding-top:10px;display:block;" ng-show="isSalesTypeSearch && isSalesPathSearch">
+                <label class="anslog-type-label" ng-class="statType=='type' ? 'btn btn-success' : 'btn btn-secondary'">
+                  <input type="radio" ng-model="statType" value="type" ng-show="false"> 유형별 경로
+                </label>
+                <label class="anslog-type-label" ng-class="statType=='path' ? 'btn btn-success' : 'btn btn-secondary'">
+                  <input type="radio" ng-model="statType" value="path" ng-show="false"> 경로별 유형
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row answer-search-item-hr">
+            <div class="col-5 text-right">
+              <label for="orderStatusSearch" style="font-size:12px;margin-bottom:0px;">수금상태</label>
+            </div>
+            <div class="col-7">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="orderStatusSearch" ng-model="isOrderStatusSearch">
+                <label class="custom-control-label" for="orderStatusSearch"></label>
+              </div>
+            </div>
+
+            <div ng-show="isOrderStatusSearch" class="col-12 answer-mt5">
+              <div class="row" style="padding-left:10px;">
+                <div
+                  ng-dropdown-multiselect=""
+                  options="orderStatusSearchResult"
+                  selected-model="searchOrderStatusList"
+                  checkboxes="true"
+                  extra-settings="selectSearchSetting"
+                  translation-texts="orderStatusSearchTexts"
+                  events="orderStatusSearchEvent"
+                  style="width:100%;"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+            <div class="row answer-search-item-hr">
+              <div class="col-5 text-right">
+                <label for="includeTestJum" style="font-size:12px;margin-bottom:0px;">테스트 제외</label>
+              </div>
+              <div class="col-7">
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" class="custom-control-input" id="includeTestJum" ng-model="isincludeTestJum">
+                  <label class="custom-control-label" for="includeTestJum"></label>
+                </div>
+              </div>
+            </div>
+          <!-- testing Hector -->
+
+
+
+
+
+
+
+          <div class="answer-search-title answer-cursor-pointer" ng-click="searchReset('menu')">메뉴 검색 <span class="answer-ml5" style="color:darkgreen;font-size:12px;"><i class="fa fa-refresh"></i></span></div>
+
+          <div class="row answer-search-item-hr">
+            <div class="col-5 text-right">
+              <label for="menuGroupSearch" style="font-size:12px;margin-bottom:0px;">메뉴그룹명</label>
+            </div>
+            <div class="col-7">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="menuGroupSearch" ng-model="isMenuGroupSearch" ng-click="checkSearchMenu()">
+                <label class="custom-control-label" for="menuGroupSearch"></label>
+              </div>
+            </div>
+
+            <div ng-show="isMenuGroupSearch" class="col-12 answer-mt5">
+              <div class="row" style="padding-left:10px;">
+                <div
+                  ng-dropdown-multiselect=""
+                  options="menuGroupSearchResult"
+                  selected-model="searchMenuGroupList"
+                  checkboxes="true"
+                  extra-settings="selectSearchSetting"
+                  translation-texts="menuGroupSearchTexts"
+                  events="menuGroupSearchEvent"
+                  style="width:100%;"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row answer-search-item-hr">
+            <div class="col-5 text-right">
+              <label for="menuNameSearch" style="font-size:12px;margin-bottom:0px;">메뉴명</label>
+            </div>
+            <div class="col-7">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="menuNameSearch" ng-model="isMenuNameSearch" ng-click="checkSearchMenu()">
+                <label class="custom-control-label" for="menuNameSearch"></label>
+              </div>
+            </div>
+
+            <div ng-show="isMenuNameSearch" class="col-12 answer-mt5">
+              <div class="row" style="padding-left:10px;">
+                <div
+                  ng-dropdown-multiselect=""
+                  options="menuNameSearchResult"
+                  selected-model="searchMenuNameList"
+                  checkboxes="true"
+                  extra-settings="selectSearchSetting"
+                  translation-texts="menuNameSearchTexts"
+                  events="menuNameSearchEvent"
+                  style="width:100%;"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="answer-search-title answer-cursor-pointer" ng-click="searchReset('payment')">결제 검색 <span class="answer-ml5" style="color:darkgreen;font-size:12px;"><i class="fa fa-refresh"></i></span></div>
+
+          <div class="row answer-search-item-hr">
+            <div class="col-5 text-right">
+              <label for="payMethodSearch" style="font-size:12px;margin-bottom:0px;">결제유형</label>
+            </div>
+            <div class="col-7">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="payMethodSearch" ng-model="isPayMethodSearch" ng-click="checkSearchPay()">
+                <label class="custom-control-label" for="payMethodSearch"></label>
+              </div>
+            </div>
+
+            <div ng-show="isPayMethodSearch" class="col-12 answer-mt5">
+              <div class="row" style="padding-left:10px;">
+                <div
+                  ng-dropdown-multiselect=""
+                  options="payMethodSearchResult"
+                  selected-model="searchPayMethodList"
+                  checkboxes="true"
+                  extra-settings="selectSearchSetting"
+                  translation-texts="payMethodSearchTexts"
+                  events="payMethodSearchEvent"
+                  style="width:100%;"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+
+
+          <div class="answer-search-title answer-cursor-pointer" ng-click="searchReset('sum')">합계 <span class="answer-ml5" style="color:darkgreen;font-size:12px;"><i class="fa fa-refresh"></i></span></div>
+
+          <div class="row answer-search-item-hr">
+            <div class="col-5 text-right">
+              <label for="statDate" style="font-size:12px;margin-bottom:0px;">일자</label>
+            </div>
+            <div class="col-7">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="statDate" ng-model="isStatDate" ng-click="checkSearchStat()">
+                <label class="custom-control-label" for="statDate"></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="row answer-search-item-hr">
+            <div class="col-5 text-right">
+              <label for="statFranchiseSearch" style="font-size:12px;margin-bottom:0px;">가맹점</label>
+            </div>
+            <div class="col-7">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="statFranchiseSearch" ng-model="isStatFranchise">
+                <label class="custom-control-label" for="statFranchiseSearch"></label>
+              </div>
+            </div>
+          </div> -->
+        </div>
+
+
+
+
+
+
+        <div class="row answer-search-bottom">
+          <div class="col-12 text-center">
+            <button class="btn btn-primary answer-form-btn-small" ng-click="searchTotalLog()" ng-show="btnFlag=='ready'" style="margin-left:10px;">
+              <i class="fa fa-search" aria-hidden="true"></i> 검색
+            </button>
+            <button class="btn btn-danger answer-form-btn-small" ng-click="searchStop()" ng-show="btnFlag=='searching'" style="margin-left:5px;">
+              <i class="fa fa-search" aria-hidden="true"></i> 중지
+            </button>
+
+            <!-- <button class="btn btn-success answer-form-btn-small" ng-click="logSearchDownload()" style="margin-left:10px;">
+              <i class="fa fa-download" aria-hidden="true"></i> 다운로드
+            </button> -->
+
+
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-success answer-form-btn-small">
+                    <i class="fa fa-download" aria-hidden="true"></i> 다운로드
+                </button>
+                <div class="btn-group" role="group">
+                    <button id="downloadReport" type="button" class="btn btn-success answer-form-btn-small dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
+                    <div class="dropdown-menu fade" aria-labelledby="downloadReport" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 35px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a href="#" class="dropdown-item" ng-click="logSearchDownload()">조회목록</a>
+                        <a href="#" class="dropdown-item" ng-click="saveReportExcel()">통계자료</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <button class="btn btn-danger answer-form-btn-small" ng-click="searchReset()" style="margin-left:10px;">
+              <i class="fa fa-refresh" aria-hidden="true"></i> 초기화
+            </button> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-10">
+        <div class="card-body">
+          <div class="row" style="padding: 0px 20px;">
+            <div class="col-4">
+              <div class="row">
+                {{logSearchTotalCount | number}} 건이 검색 되었습니다. [ {{ processTime }} ]
+              </div>
+            </div>
+
+            <div class="col-8">
+              <div class="row" style="float: right">
+                <button class="btn btn-outline-primary answer-form-btn-small answer-page-first" ng-click="logSearchPageChanged(1)">처음</button>
+                <div class="pagination">
+                  <a href="#" ng-click="logSearchJumpPrev()"><i class="fa fa-angle-double-left"></i></a>
+                  <a href="#" ng-click="logSearchPagePrev()"><i class="fa fa-angle-left"></i></a>
+
+                  <a href="#" ng-repeat="number in logSearchPaginationArray" ng-class="logSearchCurrentPage==number ? 'active' : ''" ng-click="logSearchPageChanged(number)">{{number}}</a>
+
+                  <a href="#" ng-click="logSearchPageNext()"><i class="fa fa-angle-right"></i></a>
+                  <a href="#" ng-click="logSearchJumpNext()"><i class="fa fa-angle-double-right"></i></a>
+                </div>
+                <button class="btn btn-outline-primary answer-form-btn-small answer-page-last" ng-click="logSearchPageChanged(logSearchPaginationCount)">마지막 <span>({{logSearchPaginationCount | number}} 쪽)</span></button>
+
+                <input type="number" min="1" max="{{logSearchPaginationCount}}" class="form-control answer-form-input-text-small answer-form-input-p50 answer-mr5 answer-ml5" ng-class="pageJumpNumber > logSearchPaginationCount ? 'answer_event_str_error' : ''"
+                  ng-model="logSearchJumpNumber" placeholder="1">
+                <button class="btn btn-primary btn-sm" ng-click="logSearchPageChanged(logSearchJumpNumber)">이동</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row card-content" id="logSearchPanel">
+          <div class="col-md-12">
+            <div class="card card-main" style="padding: 0px; margin-bottom:10px;max-height:300px;overflow-y:auto;">
+              <div class="table_container table-fix-head">
+                <table class="table table-condensed table-hover" style="width:100%">
+                  <thead class="answer-table-header">
+                    <tr class="table-primary">
+                      <th class="text-center" ng-repeat="fItem in statSearchField">{{fItem}}</th>
+                    </tr>
+                  </thead>
+                  <tbody class="answer-table-body">
+                    <tr ng-repeat="sItem in statSearchResult track by $index">
+                      <td class="text-center" ng-repeat="val in statSearchField track by $index">
+                        <span ng-if="sItem[val]==null && val=='판매경로'">일반주문</span>
+                        <!-- <span ng-if="sItem[val]==null && val=='POS메뉴그룹명'">배민</span> -->
+                        {{sItem[val] | chkNumberNull}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="card card-main card-search" style="padding: 0px">
+              <div class="table_container table-fix-head" id="mainTable">
+                <table class="table table-condensed table-hover" style="width:100%" rz-table="" rz-mode="resizeMode" id="logList">
+                  <thead class="answer-table-header">
+                    <tr class="table-primary">
+                      <th class="text-left" ng-repeat="val in logSearchFields track by $index" style="min-width:80px;width:{{tdWidth}}px;top:-1px;">
+                        <!-- <i class="answer-mr5 field_border" ng-class="selectFieldClass(val.val)"></i> -->
+                        {{val.key}}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="answer-table-body">
+                    <tr ng-show="logSearchFields.length == 0">
+                      <td colspan="{{logSearchFields.length}}" style="text-align:center;">검색 된 로그데이터가 없습니다.</td>
+                    </tr>
+                    <tr ng-repeat="item in logSearchResult track by $index">
+                      <!-- --<td class="text-left" ng-repeat="val in logSearchFields track by $index" ng-right-click="getFieldInfo(item, val)" menu-items="subMenuList">-->
+                      <td class="text-left" ng-repeat="val in logSearchFields track by $index">
+                        <span ng-if="item[val.key]==null && val.key=='판매경로'">일반주문</span>
+                        {{item[val.key] | chkNumber}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+
+
+
+
+    </div>
+  </div>
+</div>

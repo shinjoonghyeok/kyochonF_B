@@ -1,0 +1,33 @@
+<link href="datalog/datalog_main.css" rel="stylesheet" type="text/css" />
+
+<div ng-controller="DatalogReportController">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-2 answer-search-left-wapper">
+        <div class="answer-search-item mr-2">
+
+          <ul class="list-group">
+            <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
+              <a class="nav-link answer-nav-link" href="#" ui-sref="prt.menu" ui-sref-active="active">기간/메뉴별 판매 추이</a>
+            </li> -->
+
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <a class="nav-link answer-nav-link" href="#" ui-sref="prt.menu1100" ui-sref-active="active">기간/메뉴별 판매 추이</a>
+            </li>
+
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <a class="nav-link answer-nav-link" href="#" ui-sref="prt.path" ui-sref-active="active">유형/채널별 매출 추이</a>
+            </li>
+
+            <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
+              <a class="nav-link" href="#">추가 예정</a>
+            </li> -->
+          </ul>
+        </div>
+      </div>
+      <div class="col-10">
+        <div ui-view></div>
+      </div>
+    </div>
+  </div>
+</div>

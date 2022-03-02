@@ -1,0 +1,236 @@
+<link href="datalog/datalog_main.css" rel="stylesheet" type="text/css" />
+
+<div ng-controller="DatalogERPReleaseReportController">
+  <div class="answer-modal answer-download" id="answer-download" aria-modal="true">
+    <answer-exportes></answer-exportes>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row" style="padding: 0px 15px;">
+      <div class="col-10">
+        <div class="row">
+          <div class="form-group">
+            <label class="col-form-label col-form-label-sm" for="startDatePicker">Start Date</label>
+            <div class="input-group date" id="startDatePicker" data-target-input="nearest">
+              <input type="text" class="form-control answer-form-input-text-small datetimepicker-input" data-target="#startDatePicker" data-toggle="datetimepicker" ng-model="searchStartDate" id="searchStartDate" />
+              <div class="input-group-append answer-form-btn-small-append" data-target="#startDatePicker" data-toggle="datetimepicker">
+                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-form-label col-form-label-sm" for="endDatePicker">End Date</label>
+            <div class="input-group date" id="endDatePicker" data-target-input="nearest">
+              <input type="text" class="form-control answer-form-input-text-small datetimepicker-input" data-target="#endDatePicker" data-toggle="datetimepicker" ng-model="searchEndDate" id="searchEndDate" />
+              <div class="input-group-append answer-form-btn-small-append" data-target="#endDatePicker" data-toggle="datetimepicker">
+                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+      <div class="col-2">
+        <div class="row" style="float:right;margin-right:35px;">
+          <div class="form-group answer-ml5">
+            <div class="row" style="margin-top: 25px;">
+
+              <button class="btn btn-primary answer-form-btn-small" ng-click="searchTotalLog('basic')" ng-show="btnFlag=='ready'" style="margin-left:10px;">
+                <i class="fa fa-search" aria-hidden="true"></i> 검색
+              </button>
+              <button class="btn btn-danger answer-form-btn-small" ng-click="searchStop()" ng-show="btnFlag=='searching'" style="margin-left:5px;">
+                <i class="fa fa-search" aria-hidden="true"></i> 중지
+              </button>
+
+              <button class="btn btn-success answer-form-btn-small" ng-click="saveReportExcel()" style="margin-left:10px;">
+                <i class="fa fa-download" aria-hidden="true"></i> 다운로드
+              </button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="row">
+      <div class="col-12">
+
+        <div class="row card-content" id="logSearchPanel">
+          <div class="col-md-12">
+            <div class="card card-main card-search" style="padding: 0px">
+              <div class="table_container table-fix-head" id="mainTable">
+                <!-- <table class="table table-condensed table-hover" style="width:100%" rz-table="" rz-mode="resizeMode" id="logList"> -->
+                <table class="table table-condensed table-hover" style="width:100%" id="reportExcel1">
+                  <thead class="answer-table-header">
+                    <tr class="table-primary">
+                      <th class="text-center" colspan="{{ classMList.length + 3 }}"><요약자료 1> 출고 현황 누적 / 중량 환산 기준</th>
+                    </tr>
+                  </thead>
+                  <tbody class="answer-table-body">
+                    <tr>
+                      <td class="text-center" colspan="{{ classMList.length + 3 }}">검색 조회 기준 : {{searchStartDate}} ~ {{searchEndDate}} / 단위 : kg</td>
+                    </tr>
+
+                    <tr>
+                      <td class="text-center" rowspan="2" colspan="2">구분</td>
+                      <td class="text-center" ng-repeat="lItem in classLList" colspan="{{lItem.length}}">{{ lItem.name }}</td>
+                      <td class="text-center" rowspan="2" colspan="2">합계</td>
+                    </tr>
+
+                    <tr>
+                      <td class="text-center" ng-repeat="mItem in classMList" >{{ mItem }}</td>
+                    </tr>
+
+                    <tr>
+                      <td class="text-center" rowspan="2">{{ searchStartDate.substr(0,4) }}</td>
+                      <td>출고량</td>
+                      <td class="text-center" ng-repeat="reItem in classMList"> {{ dateNowSearchResult.val[reItem] | statNumber }}</td>
+                      <td class="text-center">{{ getTotalSummary('nowval') | statNumber }}</td>
+                    </tr>
+                    <tr>
+                      <td>구성비</td>
+                      <td class="text-center" ng-repeat="reItem in classMList"> {{ dateNowSearchResult.rate[reItem] | statRate }}</td>
+                      <td class="text-center">{{ getTotalSummary('nowrate') | statRate }}</td>
+                    </tr>
+
+                    <tr>
+                      <td class="text-center" rowspan="2">{{ searchStartDate.substr(0,4) -1 }}</td>
+                      <td>출고량</td>
+                      <td class="text-center" ng-repeat="reItem in classMList"> {{ datePreSearchResult.val[reItem] | statNumber }}</td>
+                      <td class="text-center">{{ getTotalSummary('preval') | statNumber }}</td>
+                    </tr>
+                    <tr>
+                      <td>구성비</td>
+                      <td class="text-center" ng-repeat="reItem in classMList"> {{ datePreSearchResult.rate[reItem] | statRate }}</td>
+                      <td class="text-center">{{ getTotalSummary('prerate') | statRate }}</td>
+                    </tr>
+
+                    <tr>
+                      <td rowspan="2">전년 비</td>
+                      <td>증감</td>
+                      <td class="text-center" ng-repeat="reItem in classMList">
+                        {{ dateNowSearchResult.val[reItem] - datePreSearchResult.val[reItem] | statNumber }}
+                      </td>
+                      <td class="text-center">
+                        {{ getTotalSummary('nowval') - getTotalSummary('preval') | statNumber }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>증감률</td>
+                      <td class="text-center" ng-repeat="reItem in classMList">
+                        {{ ( (dateNowSearchResult.val[reItem] - datePreSearchResult.val[reItem]) / dateNowSearchResult.val[reItem] ) * 100 | statRate }}
+                      </td>
+                      <td class="text-center">
+                        {{ ( (getTotalSummary('nowval') - getTotalSummary('preval')) / getTotalSummary('nowval') ) * 100 | statRate }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+
+                <table class="table table-condensed table-hover" style="width:100%" id="reportExcel2">
+                  <thead class="answer-table-header">
+                    <tr class="table-primary">
+                      <th class="text-center" colspan="10"><요약자료 2> 출고 요약(절단육 vs 부분육 vs 순살) / 부분육은 날개환산, 북채환산 적용</th>
+                    </tr>
+                  </thead>
+                  <tbody class="answer-table-body">
+                    <tr>
+                      <td class="text-center" colspan="10">검색 조회 기준 : {{searchStartDate}} ~ {{searchEndDate}} / 단위 : kg</td>
+                    </tr>
+
+                    <tr>
+                      <td class="text-center" rowspan="2">구분</td>
+                      <td class="text-center" rowspan="2">절단육</td>
+                      <td class="text-center" colspan="3">부분육 환산기준</td>
+                      <td class="text-center" rowspan="2">순살</td>
+                      <td class="text-center" rowspan="2">기타1</td>
+                      <td class="text-center" rowspan="2">기타2</td>
+                      <td class="text-center" rowspan="2" colspan="2">계</td>
+                    </tr>
+                    <tr>
+                      <td class="text-center">날개</td>
+                      <td class="text-center">다리</td>
+                      <td class="text-center">계</td>
+                    </tr>
+                    <tr>
+                      <td class="text-center">누계</td>
+                      <td class="text-center">{{ sumSearchNowResult.cutmeat | statNumber }}</td>
+                      <td class="text-center">{{ sumSearchNowResult.wing | statNumber }}</td>
+                      <td class="text-center">{{ sumSearchNowResult.leg | statNumber }}</td>
+                      <td class="text-center">{{ sumSearchNowResult.wing + sumSearchNowResult.leg | statNumber }}</td>
+                      <td class="text-center">{{ sumSearchNowResult.flesh | statNumber }}</td>
+                      <td class="text-center">{{ sumSearchNowResult.etc1 | statNumber }}</td>
+                      <td class="text-center">{{ sumSearchNowResult.etc2 | statNumber }}</td>
+                      <td class="text-center" colspan="2">{{ sumSearchNowResult.cutmeat + sumSearchNowResult.wing + sumSearchNowResult.leg + sumSearchNowResult.flesh + sumSearchNowResult.etc1 + sumSearchNowResult.etc2 | statNumber }}</td>
+                    </tr>
+                    <tr>
+                      <td class="text-center">누계(전년)</td>
+                      <td class="text-center">{{ sumSearchPreResult.cutmeat | statNumber }}</td>
+                      <td class="text-center">{{ sumSearchPreResult.wing | statNumber }}</td>
+                      <td class="text-center">{{ sumSearchPreResult.leg | statNumber }}</td>
+                      <td class="text-center">{{ sumSearchPreResult.wing + sumSearchPreResult.leg | statNumber }}</td>
+                      <td class="text-center">{{ sumSearchPreResult.flesh | statNumber }}</td>
+                      <td class="text-center">{{ sumSearchPreResult.etc1 | statNumber }}</td>
+                      <td class="text-center">{{ sumSearchPreResult.etc2 | statNumber }}</td>
+                      <td class="text-center" colspan="2">{{ sumSearchPreResult.cutmeat + sumSearchPreResult.wing + sumSearchPreResult.leg + sumSearchPreResult.flesh + sumSearchPreResult.etc1 + sumSearchPreResult.etc2 | statNumber }}</td>
+                    </tr>
+
+                    <tr>
+                      <td class="text-center">증감</td>
+                      <td class="text-center">{{ sumSearchRate[0].cutmeat | statNumber }}</td>
+                      <td class="text-center">{{ sumSearchRate[0].wing | statNumber }}</td>
+                      <td class="text-center">{{ sumSearchRate[0].leg | statNumber }}</td>
+                      <td class="text-center">{{ sumSearchRate[0].ssum | statNumber }}</td>
+                      <td class="text-center">{{ sumSearchRate[0].flesh | statNumber }}</td>
+                      <td class="text-center">{{ sumSearchRate[0].etc1 | statNumber }}</td>
+                      <td class="text-center">{{ sumSearchRate[0].etc2 | statNumber }}</td>
+                      <td class="text-center" colspan="2">{{ sumSearchRate[0].tsum | statNumber }}</td>
+                    </tr>
+
+                    <tr>
+                      <td class="text-center">증감률</td>
+                      <td class="text-center">{{ sumSearchRate[1].cutmeat | statRate }}</td>
+                      <td class="text-center">{{ sumSearchRate[1].wing | statRate }}</td>
+                      <td class="text-center">{{ sumSearchRate[1].leg | statRate }}</td>
+                      <td class="text-center">{{ sumSearchRate[1].ssum | statRate }}</td>
+                      <td class="text-center">{{ sumSearchRate[1].flesh | statRate }}</td>
+                      <td class="text-center">{{ sumSearchRate[1].etc1 | statRate }}</td>
+                      <td class="text-center">{{ sumSearchRate[1].etc2 | statRate }}</td>
+                      <td class="text-center" colspan="2">{{ sumSearchRate[1].tsum | statRate }}</td>
+                    </tr>
+
+
+                    <tr>
+                      <td class="text-center" colspan="10"><통계 자료> - 상세 로우 데이터</td>
+                    </tr>
+
+                    <tr>
+                      <td class="text-center" ng-repeat="fItem in detailRowField">{{ fItem.value }}</td>
+                    </tr>
+
+                    <tr ng-repeat="vItem in releaseSearchResult">
+                      <td class="text-center" ng-repeat="fItem in detailRowField">{{ vItem[fItem.key] | statNumber }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+
+
+
+
+    </div>
+  </div>
+</div>

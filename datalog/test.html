@@ -1,0 +1,201 @@
+<link href="datalog/datalog_main.css" rel="stylesheet" type="text/css" />
+
+<div ng-controller="DatalogTestController">
+  <div class="answer-modal answer-download" id="answer-download" aria-modal="true">
+    <answer-exportes></answer-exportes>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-2 answer-search-left-wapper">
+
+        <div class="row answer-search-bottom">
+          <div class="col-12 text-center">
+            <button class="btn btn-primary answer-form-btn-small" ng-click="searchTotalLog()" ng-show="btnFlag=='ready'" style="margin-left:10px;">
+              <i class="fa fa-search" aria-hidden="true"></i> 검색
+            </button>
+            <button class="btn btn-danger answer-form-btn-small" ng-click="searchStop()" ng-show="btnFlag=='searching'" style="margin-left:5px;">
+              <i class="fa fa-search" aria-hidden="true"></i> 중지
+            </button>
+
+            <!-- <button class="btn btn-success answer-form-btn-small" ng-click="logSearchDownload()" style="margin-left:10px;">
+              <i class="fa fa-download" aria-hidden="true"></i> 다운로드
+            </button> -->
+
+
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-success answer-form-btn-small">
+                    <i class="fa fa-download" aria-hidden="true"></i> 다운로드
+                </button>
+                <div class="btn-group" role="group">
+                    <button id="downloadReport" type="button" class="btn btn-success answer-form-btn-small dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
+                    <div class="dropdown-menu fade" aria-labelledby="downloadReport" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 35px, 0px); top: 0px; left: 0px; will-change: transform;">
+                        <a href="#" class="dropdown-item" ng-click="logSearchDownload()">조회목록</a>
+                        <a href="#" class="dropdown-item" ng-click="saveReportExcel()">통계자료</a>
+                    </div>
+                </div>
+            </div>
+
+
+            <button class="btn btn-danger answer-form-btn-small" ng-click="reSearchAction()" style="margin-left:5px;">
+              <i class="fa fa-search" aria-hidden="true"></i> 재검색 {{ reSearchInfo.length }}
+            </button>
+
+            <!-- <button class="btn btn-danger answer-form-btn-small" ng-click="searchReset()" style="margin-left:10px;">
+              <i class="fa fa-refresh" aria-hidden="true"></i> 초기화
+            </button> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-10">
+        <div class="col-12">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" ng-click="showQueryResult('basic')" ng-class="showInfo=='basic' ? 'active' : ''" data-toggle="tab">기본조회</a>
+                </li>
+                <li class="nav-item" ng-repeat="(i, reItem) in reSearchInfo track by $index">
+                    <a class="nav-link" ng-click="showQueryResult(i)" ng-class="showInfo==i ? 'active' : ''" data-toggle="tab">재검색 {{ i }}</a>
+                </li>
+            </ul>
+        </div>
+
+
+
+        <div ng-show="showInfo=='basic'">
+          <div class="card-body">
+            <div class="row" style="padding: 0px 20px;">
+              <div class="col-4">
+                <div class="row">
+                  {{logSearchTotalCount | number}} 건이 검색 되었습니다. [ {{ processTime }} ]
+                </div>
+              </div>
+
+              <div class="col-8">
+                <div class="row" style="float: right">
+                  <button class="btn btn-outline-primary answer-form-btn-small answer-page-first" ng-click="logSearchPageChanged(1)">처음</button>
+                  <div class="pagination">
+                    <a href="#" ng-click="logSearchJumpPrev()"><i class="fa fa-angle-double-left"></i></a>
+                    <a href="#" ng-click="logSearchPagePrev()"><i class="fa fa-angle-left"></i></a>
+
+                    <a href="#" ng-repeat="number in logSearchPaginationArray" ng-class="logSearchCurrentPage==number ? 'active' : ''" ng-click="logSearchPageChanged(number)">{{number}}</a>
+
+                    <a href="#" ng-click="logSearchPageNext()"><i class="fa fa-angle-right"></i></a>
+                    <a href="#" ng-click="logSearchJumpNext()"><i class="fa fa-angle-double-right"></i></a>
+                  </div>
+                  <button class="btn btn-outline-primary answer-form-btn-small answer-page-last" ng-click="logSearchPageChanged(logSearchPaginationCount)">마지막 <span>({{logSearchPaginationCount | number}} 쪽)</span></button>
+
+                  <input type="number" min="1" max="{{logSearchPaginationCount}}" class="form-control answer-form-input-text-small answer-form-input-p50 answer-mr5 answer-ml5" ng-class="pageJumpNumber > logSearchPaginationCount ? 'answer_event_str_error' : ''"
+                    ng-model="logSearchJumpNumber" placeholder="1">
+                  <button class="btn btn-primary btn-sm" ng-click="logSearchPageChanged(logSearchJumpNumber)">이동</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row card-content" id="logSearchPanel">
+            <div class="col-md-12">
+              <div class="card card-main card-search" style="padding: 0px">
+                <div class="table_container table-fix-head" id="mainTable">
+                  <table class="table table-condensed table-hover" style="width:100%" rz-table="" rz-mode="resizeMode" id="logList">
+                    <thead class="answer-table-header">
+                      <tr class="table-primary">
+                        <th class="text-left" ng-repeat="val in logSearchFields track by $index" style="min-width:80px;width:{{tdWidth}}px;">
+                          <!-- <i class="answer-mr5 field_border" ng-class="selectFieldClass(val.val)"></i> -->
+                          {{val.key}}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody class="answer-table-body">
+                      <tr ng-show="logSearchFields.length == 0">
+                        <td colspan="{{logSearchFields.length}}" style="text-align:center;">검색 된 로그데이터가 없습니다.</td>
+                      </tr>
+                      <tr ng-repeat="item in logSearchResult track by $index">
+                        <!-- --<td class="text-left" ng-repeat="val in logSearchFields track by $index" ng-right-click="getFieldInfo(item, val)" menu-items="subMenuList">-->
+                        <td class="text-left" ng-repeat="val in logSearchFields track by $index">
+                          {{item[val.key]  | chkNumber}}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+        <div ng-show="showInfo!='basic'">
+          <div class="card-body">
+            <div class="row" style="padding: 0px 20px;">
+              <div class="col-4">
+                <div class="row">
+                  {{reSearchTotalCount[showInfo] | number}} 건이 검색 되었습니다. [ {{ processTime }} : {{showInfo}} ]
+                </div>
+              </div>
+
+              <div class="col-8">
+                <div class="row" style="float: right">
+                  <button class="btn btn-outline-primary answer-form-btn-small answer-page-first" ng-click="reSearchPageChanged(1,showInfo)">처음</button>
+                  <div class="pagination">
+                    <a href="#" ng-click="reSearchJumpPrev(showInfo)"><i class="fa fa-angle-double-left"></i></a>
+                    <a href="#" ng-click="reSearchPagePrev(showInfo)"><i class="fa fa-angle-left"></i></a>
+
+                    <a href="#" ng-repeat="number in reSearchPaginationArray[showInfo]" ng-class="reSearchCurrentPage[showInfo]==number ? 'active' : ''" ng-click="reSearchPageChanged(number,showInfo)">{{number}}</a>
+
+                    <a href="#" ng-click="reSearchPageNext(showInfo)"><i class="fa fa-angle-right"></i></a>
+                    <a href="#" ng-click="reSearchJumpNext(showInfo)"><i class="fa fa-angle-double-right"></i></a>
+                  </div>
+                  <button class="btn btn-outline-primary answer-form-btn-small answer-page-last" ng-click="reSearchPageChanged(reSearchPaginationCount,showInfo)">마지막 <span>({{reSearchPaginationCount[showInfo] | number}} 쪽)</span></button>
+
+                  <input type="number" min="1" max="{{reSearchPaginationCount[showInfo]}}" class="form-control answer-form-input-text-small answer-form-input-p50 answer-mr5 answer-ml5" ng-class="pageJumpNumber > reSearchPaginationCount ? 'answer_event_str_error' : ''"
+                    ng-model="reSearchJumpNumber[showInfo]" placeholder="1">
+                  <button class="btn btn-primary btn-sm" ng-click="reSearchPageChanged(reSearchJumpNumber,showInfo)">이동</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row card-content" id="logSearchPanel">
+            <div class="col-md-12">
+              <div class="card card-main card-research" style="padding: 0px">
+                <div class="table_container table-fix-head" id="mainTable">
+                  <table class="table table-condensed table-hover" style="width:100%" rz-table="" rz-mode="resizeMode" id="logList">
+                    <thead class="answer-table-header">
+                      <tr class="table-primary">
+                        <th class="text-left" ng-repeat="val in reSearchFields[showInfo] track by $index" style="min-width:80px;width:{{tdWidth}}px;">
+                          <!-- <i class="answer-mr5 field_border" ng-class="selectFieldClass(val.val)"></i> -->
+                          {{val.key}}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody class="answer-table-body">
+                      <tr ng-show="reSearchFields.length == 0">
+                        <td colspan="{{reSearchFields.length}}" style="text-align:center;">검색 된 로그데이터가 없습니다.</td>
+                      </tr>
+                      <tr ng-repeat="item in reSearchInfo[showInfo].result track by $index">
+                        <!-- --<td class="text-left" ng-repeat="val in logSearchFields track by $index" ng-right-click="getFieldInfo(item, val)" menu-items="subMenuList">-->
+                        <td class="text-left" ng-repeat="val in reSearchFields[showInfo] track by $index">
+                          {{item[val.key]  | chkNumber}}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+
+
+
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,189 @@
+<link href="datalog/datalog_main.css" rel="stylesheet" type="text/css" />
+
+<div ng-controller="DatalogMenuReport1100Controller">
+    <div class="answer-modal answer-download" id="answer-download" aria-modal="true">
+        <answer-exportes></answer-exportes>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row" style="padding: 0px 15px;">
+            <div class="col-10">
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-form-label col-form-label-sm" for="startDatePicker">Start Date</label>
+                        <div class="input-group date" id="startDatePicker" data-target-input="nearest">
+                            <input type="text" class="form-control answer-form-input-text-small datetimepicker-input" data-target="#startDatePicker" data-toggle="datetimepicker" ng-model="searchStartDate" id="searchStartDate" />
+                            <div class="input-group-append answer-form-btn-small-append" data-target="#startDatePicker" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="col-form-label col-form-label-sm" for="endDatePicker">End Date</label>
+                        <div class="input-group date" id="endDatePicker" data-target-input="nearest">
+                            <input type="text" class="form-control answer-form-input-text-small datetimepicker-input" data-target="#endDatePicker" data-toggle="datetimepicker" ng-model="searchEndDate" id="searchEndDate" />
+                            <div class="input-group-append answer-form-btn-small-append" data-target="#endDatePicker" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-form-label col-form-label-sm ml-3" for="endDatePicker">지사명</label>
+                        <div
+                            ng-dropdown-multiselect=""
+                            options="branchSearchResult"
+                            selected-model="searchBranchList"
+                            checkboxes="true"
+                            extra-settings="selectSearchSetting"
+                            translation-texts="branchSearchTexts"
+                            events="branchSearchEvent"
+                            style="width:100%;"
+                        ></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-form-label col-form-label-sm ml-3" for="endDatePicker">가맹점명</label>
+                        <div
+                            ng-dropdown-multiselect=""
+                            options="franchiseSearchResult"
+                            selected-model="searchFranchiseList"
+                            checkboxes="true"
+                            extra-settings="selectSearchSetting"
+                            translation-texts="franchiseSearchTexts"
+                            events="franchiseSearchEvent"
+                            style="width:100%;"
+                        ></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-form-label col-form-label-sm ml-3" for="endDatePicker">메뉴그룹명</label>
+                        <div
+                            ng-dropdown-multiselect=""
+                            options="menuGroupSearchResult"
+                            selected-model="searchMenuGroupList"
+                            checkboxes="true"
+                            extra-settings="selectSearchSetting"
+                            translation-texts="menuGroupSearchTexts"
+                            events="menuGroupSearchEvent"
+                            style="width:100%;"
+                        ></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-form-label col-form-label-sm ml-3" for="endDatePicker">메뉴명</label>
+                        <div
+                            ng-dropdown-multiselect=""
+                            options="menuNameSearchResult"
+                            selected-model="searchMenuNameList"
+                            checkboxes="true"
+                            extra-settings="selectSearchSetting"
+                            translation-texts="menuNameSearchTexts"
+                            events="menuNameSearchEvent"
+                            style="width:100%;"
+                        ></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-form-label col-form-label-sm ml-3" for="includeTestJum" >테스트 제외</label>
+                        <div class="col-7"> 
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="includeTestJum" margin  ng-model="isincludeTestJum" >
+                                <label class="custom-control-label" for="includeTestJum"></label>
+                                
+                            </div>
+                        </div>
+                      <!-- @testing Hector -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-2">
+                <div class="row" style="float:right;margin-right:35px;">
+                    <div class="form-group answer-ml5">
+                        <div class="row" style="margin-top: 25px;">
+                            <button class="btn btn-primary answer-form-btn-small" ng-click="searchTotalLog('basic')" ng-show="btnFlag=='ready'" style="margin-left:10px;">
+                                <i class="fa fa-search" aria-hidden="true"></i> 검색
+                            </button>
+                            <button class="btn btn-danger answer-form-btn-small" ng-click="searchStop()" ng-show="btnFlag=='searching'" style="margin-left:5px;">
+                                <i class="fa fa-search" aria-hidden="true"></i> 중지
+                            </button>
+
+                            <button class="btn btn-success answer-form-btn-small" ng-click="saveReportExcel()" style="margin-left:10px;">
+                                <i class="fa fa-download" aria-hidden="true"></i> 다운로드
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-12">
+                <div class="row card-content" id="logSearchPanel">
+                    <div class="col-md-12">
+                        <div class="card card-main card-search" style="padding: 0px">
+                            <div class="table_container table-fix-head" id="mainTable">
+
+                                <table class="table table-condensed table-hover" style="width:100%" rz-table="" rz-mode="resizeMode" id="logList">
+                                    <thead class="answer-table-header">
+                                        <tr class="table-primary">
+                                            <th class="text-center" ng-repeat="val in logSearchFields track by $index" style="top:-1px;min-width:80px;width:{{tdWidth}}px;">
+                                                <div ng-switch="val.key">
+                                                    <div ng-switch-when="posGroupName"><span class="answer-table-header-font">포스그룹</span></div>
+                                                    <div ng-switch-when="menuName" class="answer-table-header-font"><span>메뉴명</span></div>
+                                                    <div ng-switch-when="sumCount" class="answer-table-header-font"><span>소계수량</span></div>
+                                                    <div ng-switch-when="sumMoney" class="answer-table-header-font"><span>소계총액</span></div>
+                                                    <div ng-switch-when="rateCount" class="answer-table-header-font"><span>비율수량</span></div>
+                                                    <div ng-switch-when="rateMoney" class="answer-table-header-font"><span>비율총액</span></div>
+                                                    <div ng-switch-default class="answer-table-header-font"><span>{{val.key | kcreport}}</span></div>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody class="answer-table-body">
+                                        <tr ng-show="logSearchFields.length == 0">
+                                            <td colspan="{{logSearchFields.length}}" style="text-align:center;">검색 된 로그데이터가 없습니다.</td>
+                                        </tr>
+                                        <tr ng-repeat="item in logSearchResult track by $index">
+                                            <td class="text-right" ng-repeat="val in logSearchFields track by $index" ng-if="item['posGroupName'] == '비율'">
+                                                <div ng-switch="val.key">
+                                                    <div ng-switch-when="posGroupName"><span>{{item[val.key]}}</span></div>
+                                                    <div ng-switch-when="menuName"><span>{{item[val.key]}}</span></div>
+                                                    <div ng-switch-when="sumCount"><span>{{item[val.key] | kcrprate}}</span></div>
+                                                    <div ng-switch-when="sumMoney"><span>{{item[val.key] | kcrprate}}</span></div>
+                                                    <div ng-switch-when="rateCount"><span></span></div>
+                                                    <div ng-switch-when="rateMoney"><span></span></div>
+                                                    <div ng-switch-default><span>{{item[val.key] | kcrprate}}</span></div>
+                                                </div>
+                                            </td>
+                                            <td class="text-right" ng-repeat="val in logSearchFields track by $index" ng-if="item['posGroupName'] != '비율'">
+                                                <div ng-switch="val.key">
+                                                    <div ng-switch-when="posGroupName"><span>{{item[val.key]}}</span></div>
+                                                    <div ng-switch-when="menuName"><span>{{item[val.key]}}</span></div>
+                                                    <div ng-switch-when="sumCount"><span>{{item[val.key] | chkNumberNull}}</span></div>
+                                                    <div ng-switch-when="sumMoney"><span>{{item[val.key] | chkNumberNull}}</span></div>
+                                                    <div ng-switch-when="rateCount"><span>{{item[val.key] | kcrprate}}</span></div>
+                                                    <div ng-switch-when="rateMoney"><span>{{item[val.key] | kcrprate}}</span></div>
+                                                    <div ng-switch-default><span>{{item[val.key] | chkNumberNull}}</span></div>
+                                                </div>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+</div>

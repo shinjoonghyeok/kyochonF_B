@@ -1,0 +1,96 @@
+@charset "UTF-8";
+
+.answer-search-left-wapper {
+  padding: 10px;
+  border-right: 1px solid #CCCCCC;
+  background-color: #fafafa;
+  text-align: center;
+  height: calc(100vh)
+}
+
+.answer-search-item-hr {
+  border-bottom: 1px solid #CCCCCC;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  margin-right: 0px !important;
+}
+
+.answer-search-item {
+  overflow-y: auto;
+  height: 90%;
+  margin-right: -10px;
+  padding-left: 5px;
+}
+
+.answer_field_number:after {
+  font-style: normal;
+  font-weight: bold;
+  content: "1";
+}
+
+#mainTable table {
+  border-collapse: collapse;
+}
+
+#mainTable table th {
+  min-width: 10px;
+  color: #FFFFFF;
+  /**background-color: #f8f8f8;**/
+}
+
+#mainTable table th, #mainTable table td {
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  /**padding: .75em;**/
+  border-right: 1px solid rgba(0,0,0,0.05);
+  vertical-align: middle;
+}
+
+.answer-search-bottom {
+  border-top: 1px solid #CCCCCC;
+  padding-top: 10px;
+  margin-top: 10px;
+  margin-right: 0px !important;
+  position: absolute;
+  bottom: 40px;
+  width: 100%;
+}
+
+.answer-search-title {
+  height: 40px;
+  font-size: 15px;
+  font-weight: bold;
+  padding-top: 5px;
+}
+
+.answer-table-back0 {
+  background-color: #777777 !important;
+}
+.answer-table-back1 {
+  background-color: #593196 !important;
+}
+.answer-table-back2 {
+  background-color: #006637 !important;
+}
+
+.table-fix-head { overflow-y: auto; }
+.table-fix-head thead th { position: sticky; top: 0; }
+
+
+.rz-handle {
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.05) 2px,
+    rgba(0, 0, 0, 0.05) 4px
+  );
+
+  .wmd-view-topscroll, .wmd-view {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    width: 300px;
+    border: none 0px RED;
+}

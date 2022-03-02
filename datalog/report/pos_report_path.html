@@ -1,0 +1,199 @@
+<link href="datalog/datalog_main.css" rel="stylesheet" type="text/css" />
+
+<div ng-controller="DatalogPathReportController">
+  <div class="answer-modal answer-download" id="answer-download" aria-modal="true">
+    <answer-exportes></answer-exportes>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row" style="padding: 0px 15px;">
+      <div class="col-10">
+        <div class="row">
+          <div class="form-group">
+            <label class="col-form-label col-form-label-sm" for="startDatePicker">Start Date</label>
+            <div class="input-group date" id="startDatePicker" data-target-input="nearest">
+              <input type="text" class="form-control answer-form-input-text-small datetimepicker-input" data-target="#startDatePicker" data-toggle="datetimepicker" ng-model="searchStartDate" id="searchStartDate" />
+              <div class="input-group-append answer-form-btn-small-append" data-target="#startDatePicker" data-toggle="datetimepicker">
+                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-form-label col-form-label-sm" for="endDatePicker">End Date</label>
+            <div class="input-group date" id="endDatePicker" data-target-input="nearest">
+              <input type="text" class="form-control answer-form-input-text-small datetimepicker-input" data-target="#endDatePicker" data-toggle="datetimepicker" ng-model="searchEndDate" id="searchEndDate" />
+              <div class="input-group-append answer-form-btn-small-append" data-target="#endDatePicker" data-toggle="datetimepicker">
+                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-form-label col-form-label-sm ml-3" for="endDatePicker">지사명</label>
+            <div
+              ng-dropdown-multiselect=""
+              options="branchSearchResult"
+              selected-model="searchBranchList"
+              checkboxes="true"
+              extra-settings="selectSearchSetting"
+              translation-texts="branchSearchTexts"
+              events="branchSearchEvent"
+              style="width:100%;"
+            ></div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-form-label col-form-label-sm ml-3" for="endDatePicker">가맹점명</label>
+            <div
+              ng-dropdown-multiselect=""
+              options="franchiseSearchResult"
+              selected-model="searchFranchiseList"
+              checkboxes="true"
+              extra-settings="selectSearchSetting"
+              translation-texts="franchiseSearchTexts"
+              events="franchiseSearchEvent"
+              style="width:100%;"
+            ></div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-form-label col-form-label-sm ml-3" for="includeTestJum" >테스트 제외</label>
+            <div class="col-7"> 
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="includeTestJum" margin  ng-model="isincludeTestJum" >
+                <label class="custom-control-label" for="includeTestJum"></label>
+              </div>
+
+            </div>
+          </div>
+          <!-- @testing Hector -->
+        </div>
+      </div>
+
+      <div class="col-2">
+        <div class="row" style="float:right;margin-right:35px;">
+          <div class="form-group answer-ml5">
+            <div class="row" style="margin-top: 25px;">
+
+              <button class="btn btn-primary answer-form-btn-small" ng-click="searchPathReport('basic')" ng-show="btnFlag=='ready'" style="margin-left:10px;">
+                <i class="fa fa-search" aria-hidden="true"></i> 검색
+              </button>
+              <button class="btn btn-danger answer-form-btn-small" ng-click="searchStop()" ng-show="btnFlag=='searching'" style="margin-left:5px;">
+                <i class="fa fa-search" aria-hidden="true"></i> 중지
+              </button>
+
+              <button class="btn btn-success answer-form-btn-small" ng-click="saveReportExcel()" style="margin-left:10px;">
+                <i class="fa fa-download" aria-hidden="true"></i> 다운로드
+              </button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="row">
+      <div class="col-12">
+
+        <div class="row card-content" id="logSearchPanel">
+          <div class="col-md-12">
+            <div class="card card-main card-search" style="padding: 0px">
+              <div class="table_container table-fix-head" id="mainTable">
+                <!-- <table class="table table-condensed table-hover" style="width:100%" rz-table="" rz-mode="resizeMode" id="logList"> -->
+                <table class="table table-condensed table-hover" style="width:100%" id="reportExcel">
+                  <thead class="answer-table-header">
+                    <tr class="table-secondary">
+                      <th class="text-center answer-table-back0" rowspan="2">주문일자</th>
+                      <th class="text-center answer-table-back0" rowspan="2">요일</th>
+                      <th class="text-center answer-table-back1" colspan="{{typeSearchField.length}}">주문유형(외부 주문 채널 건수 포함)</th>
+                      <th class="text-center answer-table-back2" colspan="{{pathSearchField.length}}">주문채널(가맹점 접수 주문 및 외부 주문 채널)</th>
+                    </tr>
+                    <tr class="table-secondary">
+                      <th class="text-center answer-table-back1" ng-repeat="tfItem in typeSearchField">{{tfItem}}</th>
+                      <th class="text-center answer-table-back2" ng-repeat="pfItem in pathSearchField">{{pfItem}}</th>
+                    </tr>
+                  </thead>
+                  <tbody class="answer-table-body" ng-show="typeSearchField.length > 0 || pathSearchField.length > 0">
+                    <tr>
+                      <td style="text-align:center;" colspan="2">채널별 비율</td>
+                      <td style="text-align:center;" colspan="2" ng-repeat="rateItem in typeStatField">{{ typeNowStatRate[rateItem] | statRate}}</td>
+                      <td style="text-align:center;" colspan="2" ng-repeat="rateItem in pathStatField">{{ pathNowStatRate[rateItem] | statRate}}</td>
+                    </tr>
+
+                    <tr>
+                      <td style="text-align:center;" rowspan="2">금년</td>
+                      <td style="text-align:center;">합계</td>
+                      <td style="text-align:center;" ng-repeat="nowItem in typeSearchField">{{ typeNowStatSum[nowItem] | statNumber}}</td>
+                      <td style="text-align:center;" ng-repeat="nowItem in pathSearchField">{{ pathNowStatSum[nowItem] | statNumber}}</td>
+                    </tr>
+
+                    <tr>
+                      <td style="text-align:center;">일평균</td>
+                      <td style="text-align:center;" ng-repeat="nowItem in typeSearchField">{{ typeNowStatAvg[nowItem] | statNumber }}</td>
+                      <td style="text-align:center;" ng-repeat="nowItem in pathSearchField">{{ pathNowStatAvg[nowItem] | statNumber }}</td>
+                    </tr>
+
+                    <tr>
+                      <td style="text-align:center;" rowspan="2">작년</td>
+                      <td style="text-align:center;">합계</td>
+                      <td style="text-align:center;" ng-repeat="preItem in typeSearchField">{{ typePreStatSum[preItem] | statNumber }}</td>
+                      <td style="text-align:center;" ng-repeat="preItem in pathSearchField">{{ pathPreStatSum[preItem] | statNumber }}</td>
+                    </tr>
+
+                    <tr>
+                      <td style="text-align:center;">일평균</td>
+                      <td style="text-align:center;" ng-repeat="preItem in typeSearchField">{{ typePreStatAvg[preItem] | statNumber }}</td>
+                      <td style="text-align:center;" ng-repeat="preItem in pathSearchField">{{ pathPreStatAvg[preItem] | statNumber }}</td>
+                    </tr>
+
+                    <tr>
+                      <td style="text-align:center;">전년대비</td>
+                      <td style="text-align:center;">비율</td>
+                      <td style="text-align:center;" ng-repeat="rateItem in typeSearchField">{{ typePreStatRate[rateItem] | statRate}}</td>
+                      <td style="text-align:center;" ng-repeat="rateItem in pathSearchField">{{ pathPreStatRate[rateItem] | statRate}}</td>
+                    </tr>
+
+
+                    <tr ng-repeat="dItem in nowDateArray track by $index">
+                      <td style="text-align:center;">{{dItem.date}}</td>
+                      <td style="text-align:center;">{{dItem.week}}</td>
+                      <td class="text-center" ng-repeat="tfItem in typeSearchField">
+                        {{ typeSearchResult[dItem.date][tfItem] | chkNumber }}
+                      </td>
+
+                      <td class="text-center" ng-repeat="pfItem in pathSearchField">
+                        {{ pathSearchResult[dItem.date][pfItem] | chkNumber }}
+                      </td>
+                    </tr>
+
+
+                    <tr ng-repeat="dItem in preDateArray track by $index">
+                      <td style="text-align:center;">{{dItem.date}}</td>
+                      <td style="text-align:center;">{{dItem.week}}</td>
+                      <td class="text-center" ng-repeat="tfItem in typeSearchField">
+                        {{ typeSearchResult[dItem.date][tfItem] | chkNumber }}
+                      </td>
+
+                      <td class="text-center" ng-repeat="pfItem in pathSearchField">
+                        {{ pathSearchResult[dItem.date][pfItem] | chkNumber }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+
+
+
+
+    </div>
+  </div>
+</div>
