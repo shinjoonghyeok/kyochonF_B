@@ -1,0 +1,208 @@
+<div class="logdb-exporter">
+    <form class="form-horizontal" name="downloadFrm" novalidate>
+        <div class="answer-modal-dialog" role="document">
+            <div class="answer-modal-content">
+                <div class="answer-modal-header">
+                    <h5 class="answer-modal-title">다운로드</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="answer-modal-body">
+                    <div class="row">
+                        <div class="col-12 col-lg-12 col-xl-12">
+                            <div class="form-group answer-form-group">
+                                <div class="row">
+                                    <div class="col-md-3 answer-mt5"><strong>{{'$S_str_FileName' | translate}}</strong></div>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <input type="text" ng-model="filename" name="name" class="form-control with-warning-addon form-control-sm" placeholder="File Name" aria-describedby="basic-addon2" ng-keydown="preventSpace($event)" ng-pattern="/[0-9a-z\uAC00-\uD7A3A-Z\^\&\'\@\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_]+$/" required>
+                                            <span class="input-group-addon input-group-addon-warning addon-right" id="basic-addon2">.{{extension}}</span>
+                                        </div>
+                                        <span class="help-block" style="margin-top: 3px;" ng-show="downloadFrm.name.$invalid && isOnSubmit">{{'$S_msg_FileNameInvalidMessage' | translate}}</span>
+                                        <span class="help-block" style="margin-top: 3px;" ng-show="!(downloadFrm.name.$invalid && isOnSubmit)">&nbsp;</span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group answer-form-group">
+                                <div class="row">
+                                    <div class="col-md-3 answer-mt5"><strong>{{'$S_str_Columns' | translate}}</strong></div>
+                                    <div class="col-md-9">
+
+                                      <div class="controls">
+                                				<div style="width:210px">
+                                					<input type="search" ng-model="searchColName" ng-change="changeColName()" style="float: left; width:115px; margin-bottom: 5px; margin-right: 6px; border: 1px solid #CCC">
+                                					<label class="btn masterCheckbox" style="float: left; margin-bottom: 5px">
+                                						<select-all-checkbox checkboxes="cols" master="checkAll" class="select-all-cb"></select-all-checkbox> {{'$S_str_SelectAll' | translate}}
+                                					</label>
+                                				</div>
+                                				<div style="width:210px; height:130px; overflow:auto; margin:10px 0; display:table-cell; vertical-align:middle; text-align:center" ng-show="!isColumnLoaded">
+                                					<div style="position:relative; display:inline-block">
+                                						<i class="fa fa-circle-o-notch fa-2x fa-spin" style="color:rgba(37,84,149,0.5);"></i>
+                                					</div>
+                                				</div>
+                                				<!-- <ul class="select-container readonly" style="width:210px; height:130px; overflow:auto; margin:35px 0 3px 0" ng-show="isColumnLoaded" ui-sortable="sortableOptions" ng-model="cols" ng-style="{'border-color': (selectedCols.length == 0 && isOnSubmit) ? '#f44336' : ''}"> -->
+                                        <!-- <ul class="select-container readonly" style="width:210px; height:130px; overflow:auto; margin:35px 0 3px 0" ng-show="isColumnLoaded" ui-sortable="sortableOptions" ng-model="cols"> -->
+                                        <ul class="select-container readonly" style="width:210px; height:130px; overflow:auto; margin:35px 0 3px 0" ng-show="isColumnLoaded" ng-model="cols">
+                                					<li ng-repeat="col in cols | filter:searchColName">
+                                						<label>
+                                							<input type="checkbox" ng-model="col.is_checked" style="cursor: pointer !important" ng-change="changeMasterCheckBox(col.is_checked)">
+                                							<span style="cursor: pointer !important">{{col.name}}</span>
+                                						</label>
+                                					</li>
+                                				</ul>
+                                				<span style="color: #f44336; font-size: 11px; display:block; margin: 0;" ng-show="selectedCols.length == 0 && isOnSubmit">컬럼을 1개 이상 선택하여야 합니다.</span>
+                                				<input type="text" ng-model="addedColumnName" style="border:1px solid #CCC">
+                                				<button type="button" class="btn" style="margin:0px 0px 0px 1px; padding:2px 3px 2px 3px" ng-click="addColumn()"><i class="fa fa-plus" style="font-size: 12px"></i></button>
+                                			</div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group answer-form-group">
+                                <div class="row">
+                                    <div class="col-md-3 answer-mt5"><strong>{{'$S_str_FileType' | translate}}</strong></div>
+                                    <div class="col-md-9">
+                                        <label ng-class="extension=='csv' ? 'btn btn-success' : 'btn btn-default'">
+                                            <input type="radio" name="optFormat" ng-model="extension" value="csv" ng-show="false"> CSV
+                                        </label>
+                                        <label ng-class="extension=='xml' ? 'btn btn-success' : 'btn btn-default'">
+                                            <input type="radio" name="optFormat" ng-model="extension" value="xml" ng-show="false"> Excel XML
+                                        </label>
+                                        <label ng-class="extension=='json' ? 'btn btn-success' : 'btn btn-default'">
+                                            <input type="radio" name="optFormat" ng-model="extension" value="json" ng-show="false"> json
+                                        </label>
+                                        <span class="help-block" style="margin-top: 3px;">&nbsp;</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group answer-form-group">
+                                <div class="row">
+                                    <div class="col-md-3 answer-mt5"><strong>{{'$S_str_Range' | translate}}</strong></div>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <input type="number" ng-model="from" name="from" class="form-control form-control-sm" min="1" value="1"  only-number required />
+                                            <span class="input-group-addon addon-left"> ~ </span>
+                                            <input type="number" ng-model="to" name="to" class="form-control form-control-sm" min="1" only-number required/>
+                                        </div>
+                                        <span class="help-block" style="margin-top: 3px;" ng-show="(downloadFrm.from.$error.required || downloadFrm.to.$error.required) && isOnSubmit">{{'$S_str_RangeInvalidMessage' | translate}}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="answer-modal-footer">
+                    <button class="btn btn-danger" ng-click="close()">{{'$S_str_Close' | translate}}</button>
+                    <button type="submit" class="btn btn-primary" ng-click="validDownlodFile()" ng-disabled="id == -1 || isOnDown">{{'$S_str_Download' | translate}}</button>
+                </div>
+            </div>
+        </div>
+
+        <!--
+        <div class="modal-content anslog-modal-content">
+            <div class="modal-header anslog-modal-header">
+                <span>다운로드</span>
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body anslog-modal-body">
+                <div class="form-horizontal" style="width:100%;">
+                    <div class="form-group" style="height: 45px;">
+                        <label class="col-sm-3 control-label">{{'$S_str_FileName' | translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input type="text" ng-model="filename" name="name" class="form-control with-warning-addon anslog-w92" placeholder="File Name" aria-describedby="basic-addon2" ng-keydown="preventSpace($event)" ng-pattern="/[0-9a-z\uAC00-\uD7A3A-Z\^\&\'\@\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_]+$/" required>
+                                <span class="input-group-addon input-group-addon-warning addon-right" id="basic-addon2">.{{extension}}</span>
+                            </div>
+                            <span class="help-block" style="margin-top: 3px;" ng-show="downloadFrm.name.$invalid && isOnSubmit">{{'$S_msg_FileNameInvalidMessage' | translate}}</span>
+                            <span class="help-block" style="margin-top: 3px;" ng-show="!(downloadFrm.name.$invalid && isOnSubmit)">&nbsp;</span>
+                        </div>
+                    </div>
+                    <div class="form-group" style="height: 45px;">
+                        <label class="col-sm-3 control-label">{{'$S_str_FileType' | translate}}</label>
+                        <div class="col-sm-9">
+                            <label ng-class="extension=='csv' ? 'btn btn-success' : 'btn btn-default'">
+                                <input type="radio" name="optFormat" ng-model="extension" value="csv" ng-show="false"> CSV
+                            </label>
+                            <label ng-class="extension=='xml' ? 'btn btn-success' : 'btn btn-default'">
+                                <input type="radio" name="optFormat" ng-model="extension" value="xml" ng-show="false"> Excel XML
+                            </label>
+                            <label ng-class="extension=='json' ? 'btn btn-success' : 'btn btn-default'">
+                                <input type="radio" name="optFormat" ng-model="extension" value="json" ng-show="false"> json
+                            </label>
+                            <span class="help-block" style="margin-top: 3px;">&nbsp;</span>
+                        </div>
+                    </div>
+                    <div class="form-group" style="height: 45px;" ng-class="{'error': (downloadFrm.from.$error.required || downloadFrm.to.$error.required) && isOnSubmit}">
+                        <label class="col-sm-3 control-label">{{'$S_str_Range' | translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input type="number" ng-model="from" name="from" class="form-control anslog-w85" min="1" value="1"  only-number required />
+                                <span class="input-group-addon addon-left"> ~ </span>
+                                <input type="number" ng-model="to" name="to" class="form-control anslog-w85" min="1" only-number required/>
+                            </div>
+                            <span class="help-block" style="margin-top: 3px;" ng-show="(downloadFrm.from.$error.required || downloadFrm.to.$error.required) && isOnSubmit">{{'$S_str_RangeInvalidMessage' | translate}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="anslog-modal-btn">
+                <button type="submit" class="btn_mint" ng-click="validDownlodFile()" ng-disabled="id == -1 || isOnDown">{{'$S_str_Download' | translate}}</button>
+                <button class="btn_lilac" ng-click="close()">{{'$S_str_Close' | translate}}</button>
+            </div>
+        </div>
+        -->
+        </div>
+    </form>
+    <!--
+	<form class="form-horizontal pull-left" name="downloadFrm" novalidate>
+		<div class="form-group" ng-class="{'error': downloadFrm.name.$invalid && isOnSubmit}">
+			<label class="col-sm-3 control-label">{{'$S_str_FileName' | translate}}</label>
+			<div class="col-sm-9">
+				<input type="text" ng-model="filename" name="name" class="span3 form-control" ng-keydown="preventSpace($event)" ng-pattern="/[0-9a-z\uAC00-\uD7A3A-Z\^\&\'\@\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_]+$/" required>.{{extension}}
+				<span class="help-block" style="margin-top: 3px;" ng-show="downloadFrm.name.$invalid && isOnSubmit">{{'$S_msg_FileNameInvalidMessage' | translate}}</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-3 control-label">{{'$S_str_FileType' | translate}}</label>
+			<div class="col-sm-9">
+				<label class="radio inline span1" style="margin-left: 0px">
+					<input type="radio" name="optFormat" ng-model="extension" value="csv"> CSV
+				</label>
+				<label class="radio inline span2">
+					<input type="radio" name="optFormat" ng-model="extension" value="xml"> Excel XML
+				</label>
+				<label class="radio inline span2">
+					<input type="radio" name="optFormat" ng-model="extension" value="json"> json
+				</label>
+			</div>
+		</div>
+		<div class="form-group" ng-class="{'error': (downloadFrm.from.$error.required || downloadFrm.to.$error.required) && isOnSubmit}">
+			<label class="col-sm-3 control-label">{{'$S_str_Range' | translate}}</label>
+			<div class="col-sm-9">
+				<input type="number" ng-model="from" name="from" class="span2 form-control" min="1" value="1"  style="width:30%" only-number required/> ~
+				<input type="number" ng-model="to" name="to" class="span2 form-control" min="1" style="width:30%" only-number required/>
+				<span class="help-block" style="margin-top: 3px;" ng-show="(downloadFrm.from.$error.required || downloadFrm.to.$error.required) && isOnSubmit">{{'$S_str_RangeInvalidMessage' | translate}}</span>
+			</div>
+		</div>
+		<div class="form-group  submit-group">
+			<div class="controls">
+				<input type="submit" class="btn btn-primary" ng-click="validDownlodFile()" ng-disabled="id == -1 || isOnDown" value="{{'$S_str_Download' | translate}}"/>
+				<button class="btn" ng-click="close()">{{'$S_str_Close' | translate}}</button>
+			</div>
+		</div>
+	</form>
+	-->
+</div>

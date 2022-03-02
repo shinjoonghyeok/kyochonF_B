@@ -1,0 +1,61 @@
+<div ng-controller="datalogMainAppController">
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary answer-main-nav">
+      <a class="navbar-brand" href="#">{{logoName}}</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor" aria-controls="navbarColor" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarColor">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#" ui-sref="pos" ui-sref-active="active">POS</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="#" ui-sref="prt" ui-sref-active="active">POS 보고서</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="#" ui-sref="erp" ui-sref-active="active">ERP 물동량</a>
+          </li>
+
+          <!-- <li class="nav-item" ng-show="uid=='root' || uid=='logpresso'"> -->
+          <li class="nav-item">
+            <a class="nav-link" href="#" ui-sref="ert" ui-sref-active="active">ERP 보고서</a>
+          </li>
+<!--
+          <li class="nav-item">
+            <a class="nav-link" href="#" ui-sref="tst" ui-sref-active="active">test</a>
+          </li>
+ -->
+          <!-- <li class="nav-item">
+            <a class="nav-link" href="#">Report2</a>
+          </li> -->
+
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <content>
+    <div class="answer-main" ui-view></div>
+  </content>
+</div>
+
+<!-- Logpresso Script -->
+<script src="app.js"></script>
+
+
+<!-- SubPage Script -->
+<script type="text/javascript" src="datalog/kyochon_pos.js"></script>
+<script type="text/javascript" src="datalog/kyochon_erp.js"></script>
+<script type="text/javascript" src="datalog/pos_report.js"></script>
+<script type="text/javascript" src="datalog/erp_report.js"></script>
+
+<script type="text/javascript" src="datalog/test.js"></script>
+
+<script type="text/javascript" src="datalog/report/pos_report_menu.js"></script>
+<script type="text/javascript" src="datalog/report/pos_report_menu_1100.js"></script>
+<script type="text/javascript" src="datalog/report/pos_report_path.js"></script>
+<script type="text/javascript" src="datalog/report/erp_report_release.js"></script>

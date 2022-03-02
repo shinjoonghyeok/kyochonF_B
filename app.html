@@ -1,0 +1,89 @@
+<!doctype html>
+<html ng-app="app" data-logpresso-version="3.0">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Start PlugIn CSS -->
+	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="assets/css/jquery-ui.css" />
+	<link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css" />
+	<!--<link rel="stylesheet" type="text/css" href="assets/css/angular-material.min.css" />-->
+	<link rel="stylesheet" type="text/css" href="assets/css/sweetalert.css" />
+	<link rel="stylesheet" type="text/css" href="assets/css/highcharts.css" />
+	<link rel="stylesheet" type="text/css" href="assets/css/tempusdominus-bootstrap-4.css" />
+
+	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap-select.css" />
+	<link rel="stylesheet" type="text/css" href="assets/css/angular-table-resize.css" />
+	<link rel="stylesheet" type="text/css" href="assets/css/ng-right-click.css" />
+	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap-toggle.css" />
+	<!-- Start answer CSS -->
+	<link rel="stylesheet" type="text/css" href="assets/css/answer.css" />
+	<link rel="stylesheet" type="text/css" href="assets/css/answer-modal.css" />
+
+	<!-- Start Logpresso CSS -->
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/v3/app-initializer.css" />
+</head>
+
+<body>
+	<div ng-controller="AppContainerController">
+		<div id="app-container"></div>
+	</div>
+
+	<!-- Start Logpresso JS -->
+	<script src="/script/app-initializer.js"></script>
+	<script src="config.js"></script>
+
+
+	<!-- Start PlugIn JS -->
+	<script src="assets/js/jquery-3.3.1.min.js" type="text/javascript"></script>
+	<script src="assets/js/jquery-ui.min.js" type="text/javascript"></script>
+	<script src="assets/js/locale/ko.js" type="text/javascript"></script>
+
+	<script src="assets/js/angular-animate.js" type="text/javascript"></script>
+	<script src="assets/js/angular-aria.js" type="text/javascript"></script>
+	<script src="assets/js/angular-messages.js" type="text/javascript"></script>
+
+	<script src="assets/js/popper.js" type="text/javascript"></script>
+	<script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
+	<script src="assets/js/sweetalert.js" type="text/javascript"></script>
+	<script src="assets/js/bootstrap-notify.min.js" type="text/javascript"></script>
+	<script src="assets/js/ui-bootstrap-tpls.js" type="text/javascript"></script>
+	<script src="assets/js/moment.js" type="text/javascript"></script>
+	<script src="assets/js/tempusdominus-bootstrap-4.js" type="text/javascript"></script>
+
+	<script src="assets/js/bootstrap-select.js" type="text/javascript"></script>
+
+	<script src="assets/js/angularjs-dropdown-multiselect.js" type="text/javascript"></script>
+	<script src="assets/js/angular-drag-and-drop-lists.js" type="text/javascript"></script>
+	<script src="assets/js/ng-right-click.js" type="text/javascript"></script>
+	<script src="assets/js/bootstrap-toggle.js" type="text/javascript"></script>
+
+	<script src="assets/js/lodash.js" type="text/javascript"></script>
+	<script src="assets/js/angular-table-resize.js" type="text/javascript"></script>
+	<script src="assets/js/angular-sanitize.js" type="text/javascript"></script>
+
+	<script src="assets/js/FileSaver.js" type="text/javascript"></script>
+	<script src="assets/js/xlsx.full.min.js" type="text/javascript"></script>
+
+	<script src="assets/js/jquery.table2excel.js" type="text/javascript"></script>
+
+	<script src="assets/js/answer-define.js" type="text/javascript"></script>
+	<script src="assets/js/answer.js" type="text/javascript"></script>
+
+	<!-- Start answer JS -->
+
+	<script>
+		var path = decodeURIComponent(location.search.substr(3));
+		//var angular_modules = ['ui.bootstrap','ngTagsInput','ui.toggle','ngAlertify','chart.js'];
+		//var angular_modules = ['ui.bootstrap','ngTagsInput','ui.toggle','ngAlertify','colorpicker.module'];
+		//var angular_modules = ['ngMaterial','ngMessages','ui.bootstrap'];
+		var angular_modules = ['ui.bootstrap', 'angularjs-dropdown-multiselect', 'dndLists', 'rzTable','ngSanitize','ngRightClick'];
+		angular.bootstrap(document, parent.common.concat(angular_modules));
+	</script>
+
+
+</body>
+
+</html>
