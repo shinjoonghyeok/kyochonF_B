@@ -1,0 +1,36 @@
+@font-face {
+    font-family: 'Nanum Gothic';
+    font-style: normal;
+    font-weight: 400;
+    src: url(../fonts/Nanum+Gothic_400_normal.eot); /* http://fonts.gstatic.com/s/nanumgothic/v14/PN_3Rfi-oW3hYwmKDpxS7F_D-dja.eot */
+    src: local('☺'),
+        url(../fonts/Nanum+Gothic_400_normal.eot?#iefix) format('embedded-opentype'), /* http://fonts.gstatic.com/s/nanumgothic/v14/PN_3Rfi-oW3hYwmKDpxS7F_D-dja.eot */
+        url(../fonts/Nanum+Gothic_400_normal.woff2) format('woff2'), /* http://fonts.gstatic.com/s/nanumgothic/v14/PN_3Rfi-oW3hYwmKDpxS7F_D-dje.woff2 */
+        url(../fonts/Nanum+Gothic_400_normal.woff) format('woff'), /* http://fonts.gstatic.com/s/nanumgothic/v14/PN_3Rfi-oW3hYwmKDpxS7F_D-djY.woff */
+        url(../fonts/Nanum+Gothic_400_normal.ttf) format('truetype'), /* http://fonts.gstatic.com/s/nanumgothic/v14/PN_3Rfi-oW3hYwmKDpxS7F_D-djb5Hkr3w.ttf */
+        url(../fonts/Nanum+Gothic_400_normal.svg#Nanum+Gothic_400_normal) format('svg'); /* http://fonts.gstatic.com/l/font?kit=PN_3Rfi-oW3hYwmKDpxS7F_D-djZ&skey=e63963c7c3a19959&v=v14#NanumGothic */
+}
+@font-face {
+    font-family: 'Nanum Gothic';
+    font-style: normal;
+    font-weight: 700;
+    src: url(../fonts/Nanum+Gothic_700_normal.eot); /* {{embedded-opentype-gf-url}} */
+    src: local('☺'),
+        url(../fonts/Nanum+Gothic_700_normal.eot?#iefix) format('embedded-opentype'), /* {{embedded-opentype-gf-url}} */
+        url(../fonts/Nanum+Gothic_700_normal.woff2) format('woff2'), /* http://fonts.gstatic.com/s/nanumgothic/v14/PN_oRfi-oW3hYwmKDpxS7F_LQv3LyVsm.woff2 */
+        url(../fonts/Nanum+Gothic_700_normal.woff) format('woff'), /* http://fonts.gstatic.com/s/nanumgothic/v14/PN_oRfi-oW3hYwmKDpxS7F_LQv3LyVsg.woff */
+        url(../fonts/Nanum+Gothic_700_normal.ttf) format('truetype'), /* http://fonts.gstatic.com/s/nanumgothic/v14/PN_oRfi-oW3hYwmKDpxS7F_LQv3LyVsj9YUUUA.ttf */
+        url(../fonts/Nanum+Gothic_700_normal.svg#Nanum+Gothic_700_normal) format('svg'); /* {{svg-gf-url}} */
+}
+@font-face {
+    font-family: 'Nanum Gothic';
+    font-style: normal;
+    font-weight: 800;
+    src: url(../fonts/Nanum+Gothic_800_normal.eot); /* {{embedded-opentype-gf-url}} */
+    src: local('☺'),
+        url(../fonts/Nanum+Gothic_800_normal.eot?#iefix) format('embedded-opentype'), /* {{embedded-opentype-gf-url}} */
+        url(../fonts/Nanum+Gothic_800_normal.woff2) format('woff2'), /* http://fonts.gstatic.com/s/nanumgothic/v14/PN_oRfi-oW3hYwmKDpxS7F_LXv7LyVsm.woff2 */
+        url(../fonts/Nanum+Gothic_800_normal.woff) format('woff'), /* http://fonts.gstatic.com/s/nanumgothic/v14/PN_oRfi-oW3hYwmKDpxS7F_LXv7LyVsg.woff */
+        url(../fonts/Nanum+Gothic_800_normal.ttf) format('truetype'), /* http://fonts.gstatic.com/s/nanumgothic/v14/PN_oRfi-oW3hYwmKDpxS7F_LXv7LyVsj9YUUUA.ttf */
+        url(../fonts/Nanum+Gothic_800_normal.svg#Nanum+Gothic_800_normal) format('svg'); /* {{svg-gf-url}} */
+}
